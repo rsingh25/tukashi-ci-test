@@ -6,6 +6,8 @@ services:
     restart: always
     ports:
       - 8080
+    networks:
+      - dokploy-network
     deploy:
       replicas: 3
     environment:
@@ -14,3 +16,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.citest.rule=Host(`ci.tukashi.com`)"
       - "traefik.http.routers.citest.entrypoints=websecure"
+networks:
+  dokploy-network:
+    name: dokploy-network
+    external: true
