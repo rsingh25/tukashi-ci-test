@@ -1,4 +1,4 @@
-FROM golang:latest as build
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 
@@ -11,13 +11,19 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /myapp ./cmd/web
+# Build the Go application
+# CGO_ENABLED=0 disables cgo for static linking, resulting in a smaller binary
+# -o app specifies the output binary name
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o app ./cmd/web
+
  
 FROM alpine:latest as run
 
-# Copy the application executable from the build image
-COPY --from=build /myapp /myapp
-
 WORKDIR /app
+
+# Copy the compiled binary from the builder stage
+COPY --from=builder /app/app .
+
 EXPOSE 8080
-CMD ["/myapp"]
+
+CMD ["./app"]
