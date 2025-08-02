@@ -10,8 +10,8 @@ services:
       - dokploy-network
     deploy:
       replicas: 3
-    environment:
-      - PORT=8080
+    #environment:  All environment variables should be set in Dokploy config
+    #  - PORT=8080
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.citest.rule=Host(`ci.tukashi.com`)"

@@ -13,10 +13,9 @@ COPY . .
 
 # Build the Go application
 # CGO_ENABLED=0 disables cgo for static linking, resulting in a smaller binary
-# -o app specifies the output binary name
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o app ./cmd/web
 
- 
+# Use a minimal base image for the final stage
 FROM alpine:latest as run
 
 WORKDIR /app
